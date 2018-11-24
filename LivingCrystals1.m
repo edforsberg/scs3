@@ -3,33 +3,48 @@ clf
 
 Dt = 0.22;
 Dr = 0.16;
-v = 0.5;
+v = 0.001;
 dt = 0.1;
 rangeMax = 100;
 
 timeSteps = 2^16;
 plotTraj = false;
 
-pos = [rand*rangeMax, rand*rangeMax];
+posX = rand*rangeMax;
+posY = rand*rangeMax;
 dir = rand*2*pi;
 
-posVec = zeros(timeSteps:2);
+posVec = [];
 
 if plotTraj
-subplot(2,1,1)
-trajPlot = plot(posVec(1), posVec(2)); 
+    subplot(1,2,1);
+    trajPlot = scatter(posX, posY, 5, 'green', 'filled');
+    axis equal
+    xlim([0 rangeMax])
+    ylim([0 rangeMax])
+    drawnow
 end
 
-for i = 1:timeSteps
+for i = 1:timeSteps    
     
-    posVec(i,:) = pos;
+    Wx = normrnd(0,1)/sqrt(dt);
+    Wy = normrnd(0,1)/sqrt(dt);
+    Wdir = normrnd(0,1)/sqrt(dt);
     
-    pos(1,1) = (v*cos(dir)+sqrt(2*Dt)*rand)*dt;
-    pos(1,2) = (v*sin(dir)+sqrt(2*Dt)*rand)*dt;
-    dir = (sqrt(2*Dr)*rand)*dt;
+    dx = v*cos(dir)+sqrt(2*Dt)*Wx; 
+    dy = v*sin(dir)+sqrt(2*Dt)*Wy; 
+    dDir = sqrt(2*Dr)*Wdir; 
     
-%     if plotTraj
-%         set(trajPlot, 'XData', posVec(1), 
+    xPos = xPos + dx*dt; 
+    yPos = yPos + dy*dt; 
+    dir = dir + dDir*dt;     
+    
+    posVec = [posVec; xPos yPos]; 
+    
+    if plotTraj
+        set(trajPlot, 'XData', posVec(:,1), 'YData', posVec(:,2)); 
+        drawnow
+    end
     
 end
 
@@ -63,9 +78,10 @@ for i = 0:log2(timeSteps)
     timeVec = [timeVec; step];
 end
 
-
+subplot(1,2,2);
 timeVec = timeVec*dt;
 loglog(timeVec,MSD);
+axis equal
 
 
 
