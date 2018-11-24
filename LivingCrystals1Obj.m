@@ -5,7 +5,7 @@ Dt = 0.22;
 Dr = 0.16;
 dt = 0.1;
 xyRange = 100;
-timeSteps = 2^14+1;
+timeSteps = 2^16+1;
 showPlot = true;
 vMin = 2;
 freezeFrame = 100;
@@ -40,9 +40,9 @@ for t = 1:timeSteps
             axis equal
             xlim([0 rangeMax])
             ylim([0 rangeMax])
-            legend({'v=2', 'v=4','v=6','v=8'},'Location','southwest'); 
-            xlabel('log(t)'); 
-    ylabel('log(MSD)'); 
+            legend({'v=2 \mum/s', 'v=4 \mum/s','v=6 \mum/s','v=8 \mum/s'},'Location','southwest');
+            xlabel('x \mum');
+            ylabel('y \mum');
         end
     end
     if (t<freezeFrame)
@@ -81,8 +81,8 @@ for i = 1:nrSwimmers
     loglog(timeVec, msdMat(:,i), 'color', col)
     hold on 
     axis equal
-    legend({'y = sin(x)','y = cos(x)'},'Location','southwest'); 
+    legend({'y = sin(x)','y = cos(x)'},'Location','southeast'); 
     xlabel('log(t)'); 
-    ylabel('log(MSD)'); 
+    ylabel('log(MSD) [\mum^2]'); 
     
 end

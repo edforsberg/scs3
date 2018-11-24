@@ -3,7 +3,7 @@ classdef Swimmer < handle
     properties
         xPos = 0;
         yPos = 0;
-        dit = 0;
+        dir = 0;
         Dr = 0;
         Dt = 0;
         v = 0;
@@ -15,7 +15,7 @@ classdef Swimmer < handle
             
             obj.xPos = rand*xyRange;
             obj.yPos = rand*xyRange;
-            obj.phi = rand*xyRange;
+            obj.dir = rand*xyRange;
             obj.Dr = Dr;
             obj.Dt = Dt;
             obj.v = v;
@@ -23,7 +23,7 @@ classdef Swimmer < handle
             
         end
         
-        function Move(obj,dt)
+        function newPos = Move(obj,dt)
             
             Wx = normrnd(0,1)/sqrt(dt);
             Wy = normrnd(0,1)/sqrt(dt);
@@ -36,6 +36,24 @@ classdef Swimmer < handle
             obj.xPos = obj.xPos + dx*dt;
             obj.yPos = obj.yPos + dy*dt;
             obj.dir = obj.dir + dDir*dt;
+            
+            newPos = [obj.xPos obj.yPos]; 
+        end
+        
+        function interact(obj, Tn, dt)           
+            
+            Wdir = normrnd(0,1)/sqrt(dt);
+            dDir = Tn + sqrt(2*obj.Dr)*Wdir;
+            
+            
+            dx = obj.v*cos(obj.dir);
+            dy = obj.v*sin(obj.dir);
+            
+            
+            obj.xPos = obj.xPos + dx*dt;
+            obj.yPos = obj.yPos + dy*dt;
+            
+            
             
         end
     end

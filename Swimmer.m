@@ -39,6 +39,20 @@ classdef Swimmer < handle
             
             newPos = [obj.xPos obj.yPos]; 
         end
+        
+        function interact(obj, Tn, dt)           
+            
+            Wdir = normrnd(0,1)/sqrt(dt);
+            dDir = Tn + sqrt(2*obj.Dr)*Wdir;
+            obj.dir = obj.dir + dDir*dt;
+            
+            dx = obj.v*cos(obj.dir);
+            dy = obj.v*sin(obj.dir);            
+            
+            obj.xPos = obj.xPos + dx*dt;
+            obj.yPos = obj.yPos + dy*dt;           
+            
+        end
     end
 end
 
