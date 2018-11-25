@@ -14,7 +14,8 @@ for i = 1:n
             sj = swimmers(j);
             
             vi = si.vel;
-            ri = [sj.xPos-si.xPos sj.yPos-si.yPos 0]; 
+            ri = [sj.xPos-si.xPos sj.yPos-si.yPos 0];
+            ri = ri; 
             
             vj = sj.vel;
             rj = ri*(-1);

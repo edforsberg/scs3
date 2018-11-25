@@ -8,6 +8,7 @@ classdef Swimmer < handle
         Dt = 0;
         v = 0;
         color = 0;
+        vel = [0; 0; 0]; 
     end
     
     methods
@@ -20,7 +21,7 @@ classdef Swimmer < handle
             obj.Dt = Dt;
             obj.v = v;
             obj.color = color;
-            
+                      
         end
         
         function newPos = Move(obj,dt)
@@ -38,9 +39,10 @@ classdef Swimmer < handle
             obj.dir = obj.dir + dDir*dt;
             
             newPos = [obj.xPos obj.yPos]; 
+            obj.vel = [dx; dy; 0]/norm([dx; dy; 0]); 
         end
         
-        function interact(obj, Tn, dt)           
+        function newPos = interact(obj, Tn, dt)           
             
             Wdir = normrnd(0,1)/sqrt(dt);
             dDir = Tn + sqrt(2*obj.Dr)*Wdir;
@@ -50,9 +52,32 @@ classdef Swimmer < handle
             dy = obj.v*sin(obj.dir);            
             
             obj.xPos = obj.xPos + dx*dt;
-            obj.yPos = obj.yPos + dy*dt;           
+            obj.yPos = obj.yPos + dy*dt; 
+            
+            obj.vel = [dx; dy; 0]/norm([dx; dy; 0]); 
+            newPos = [obj.xPos obj.yPos]; 
             
         end
+        
+        function Tn = CalculateTorque(swimmer, otherSwimmers, rc, T0)
+            
+            Tn = 0; 
+            vn = swimmer.vel; 
+            xn = swimmer.xPos; 
+            yn = swimmer.yPos;             
+            
+            for i = 1:numel(otherSwimmers)                
+                rni = CalcDist([swimmer.xPos swimmer.yPos], [swimmers(i).xPos swimmers(i).yPos]);   
+                
+                if(rni < rc)
+                    si = otherSwimmers(i); 
+                    rn = [si.xPos-xn si.yPos-yn 0];                     
+                    dT = TorqueEq(vn, rn, T0);                     
+                    Tn = Tn+dT;           
+                end                
+            end
+        
+        
     end
 end
 
