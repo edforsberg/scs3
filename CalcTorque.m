@@ -2,6 +2,7 @@ function T = CalcTorque(swimmers,rc,T0)
 
 n = numel(swimmers);
 T = zeros(n,1);
+distMat = zeros(n);
 
 for i = 1:n
     
