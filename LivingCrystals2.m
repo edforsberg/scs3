@@ -3,11 +3,11 @@ clf
 
 T0 = -2;
 rc = 15;
-%rPush = 1;
+rPush = 2;
 rCol = 4;
 Dr = 0;
 Dt = 0;
-dt = 0.2;
+dt = 0.3;
 v = 10;
 xyRange = 100;
 nrSwimmers = 100;
@@ -54,8 +54,11 @@ for i = 1:timeSteps
     col = [];
     for j = 1:nrSwimmers
         if(sum(distMat(j,:) < rPush) > 1)
+            if (rand<0.5)
             swimmers(j).xPos = oldPos(j,1);
+            else
             swimmers(j).yPos = oldPos(j,2);
+            end
         end
         a = sum(distMat(j,:) < rCol);
         b = c(a,:);
