@@ -9,7 +9,8 @@ classdef Swimmer < handle
         v = 0;
         color = 0;
         vel = [0; 0; 0];
-        torque = 0; 
+        torque = 0;
+        active = true; 
     end
     
     methods
@@ -22,7 +23,7 @@ classdef Swimmer < handle
             obj.Dt = Dt;
             obj.v = v;
             obj.color = color;
-            obj.vel = [cos(obj.dir) sin(obj.dir) 0]; 
+            obj.vel = [cos(obj.dir) sin(obj.dir) 0];
             obj.vel = obj.vel/norm(obj.vel);
             
         end
@@ -47,10 +48,13 @@ classdef Swimmer < handle
         
         function interact(obj, dt, xyRange)
             
+            Wx = normrnd(0,1)/sqrt(dt);
+            Wy = normrnd(0,1)/sqrt(dt);
             Wdir = normrnd(0,1)/sqrt(dt);
+            
             dDir = obj.torque + sqrt(2*obj.Dr)*Wdir;
-            obj.dir = obj.dir + dDir*dt;            
-                     
+            obj.dir = obj.dir + dDir*dt;
+            
             obj.dir = rem(obj.dir, 2*pi);
             
             if(obj.xPos < -5)
@@ -66,11 +70,11 @@ classdef Swimmer < handle
                 obj.dir = 3*pi/2;
             end
             
-            dx = obj.v*cos(obj.dir)*dt;
-            dy = obj.v*sin(obj.dir)*dt;
+            dx = obj.v*cos(obj.dir)+sqrt(2*obj.Dt)*Wx;
+            dy = obj.v*sin(obj.dir)+sqrt(2*obj.Dt)*Wy;
             
-            obj.xPos = obj.xPos + dx;
-            obj.yPos = obj.yPos + dy;
+            obj.xPos = obj.xPos + dx*dt;
+            obj.yPos = obj.yPos + dy*dt;
             
             obj.vel = [dx; dy; 0]/norm([dx; dy; 0]);
             
@@ -92,21 +96,20 @@ classdef Swimmer < handle
                     Tn = Tn+dT;
                 end
                 swimmer.torque = Tn;
-            end        
-           
+            end
+            
         end
         
-        function Push(swimmer, otherSwimmers, rPush)
+        function pushVec = Push(swimmer, otherSwimmers, rPush)
             
-            pushVec = [0;0]; 
+            pushVec = [0;0];
             for i = 1:numel(otherSwimmers)
-                veci = [otherSwimmers(i).xPos-swimmer.xPos; otherSwimmers(i).yPos-swimmer.yPos]; 
-                veciLength = norm(veci); 
-                veci = veci/(2*veciLength*(rPush-veciLength)); 
-                pushVec = pushVec + veci;                
+                veci = [otherSwimmers(i).xPos-swimmer.xPos; otherSwimmers(i).yPos-swimmer.yPos]/2;
+                veci = (veci/norm(veci))*(rPush/2-norm(veci));
+                pushVec = pushVec - veci;
             end
             swimmer.xPos = swimmer.xPos + pushVec(1);
-            swimmer.yPos = swimmer.yPos + pushVec(1); 
+            swimmer.xPos = swimmer.xPos + pushVec(2);
         end
     end
-    end
+end

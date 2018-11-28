@@ -96,12 +96,15 @@ classdef Swimmer < handle
            
         end
         
-        function Push(swimmer, otherSwimmers, rPush)
+        function pushVec = Push(swimmer, otherSwimmers, rPush)
             
-            pushVec = [0 0]; 
+            pushVec = [0;0]; 
             for i = 1:numel(otherSwimmers)
-                veci = [otherSwimmers(i).xPos-swimmer.xPos otherSwimmers(i).yPos-swimmer.yPos]; 
-                
-            end
+                veci = [otherSwimmers(i).xPos-swimmer.xPos; otherSwimmers(i).yPos-swimmer.yPos]/2; 
+                veci = (veci/norm(veci))*(rPush-norm(veci));      
+                 pushVec = pushVec + veci; 
+            end       
+           swimmer.xPos = swimmer.xPos + pushVec(i); 
         end
+    end
     end
