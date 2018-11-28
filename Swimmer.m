@@ -75,17 +75,20 @@ classdef Swimmer < handle
             
         end
         
-        function fixOverlap(swimmer, otherSwimmers)
+        function newPos = fixOverlap(swimmer, otherSwimmers, rPush)
            
             accVec = [0 0]; 
             for i = 1:numel(otherSwimmers)
                 vec = [otherSwimmers(i).xPos-swimmer.xPos otherSwimmers(i).xPos-swimmer.xPos];
                 if(sum(vec) ~=0)
-                    accVec = accVec + vec;
+                    length = rPush-norm(vec); 
+                    vec = (vec/norm(vec))*length;        
+                    accVec = accVec - vec;
                 end
             end
             swimmer.xPos = swimmer.xPos + accVec(1)/2; 
-            swimmer.yPos = swimmer.xPos + accVec(2)/2; 
+            swimmer.yPos = swimmer.yPos + accVec(2)/2; 
+            newPos = [swimmer.xPos swimmer.yPos];
         end
         
         function Tn = CalculateTorque(swimmer, otherSwimmer, rc, T0)

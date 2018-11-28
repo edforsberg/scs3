@@ -1,12 +1,12 @@
 clc
 clf
 
-T0 = 2;
+T0 = 5;
 rc = 15;
-rPush = 1;
+rPush = 2;
 rCol = 4;
-Dr = 0.1;
-Dt = 0.1;
+Dr = 0;
+Dt = 0;
 dt = 0.05;
 v = 10;
 xyRange = 100;
@@ -44,12 +44,10 @@ for i = 1:timeSteps
         tVec = [tVec; Tn];
     end
     
-    oldPos = zeros(nrSwimmers,2);
+   % oldPos = zeros(nrSwimmers,2);
     for j = 1:nrSwimmers
-        oldPos(j,:)=[swimmers(j).xPos swimmers(j).yPos];
+      %  oldPos(j,:)=[swimmers(j).xPos swimmers(j).yPos];
         newPos = interact(swimmers(j), tVec(j), dt, xyRange);
-        xData = [xData;newPos(1)];
-        yData = [yData;newPos(2)];
     end
     
     distMat = GetDistMat(swimmers);
@@ -57,7 +55,10 @@ for i = 1:timeSteps
     for j = 1:nrSwimmers
         
         neighbourI = find(distMat(j,:) < rPush);
-    fixOverlap(swimmers(j), swimmers(neighbourI));    
+        newPos = fixOverlap(swimmers(j), swimmers(neighbourI), rPush);
+        
+        xData = [xData;newPos(1)];
+        yData = [yData;newPos(2)];
         
         a = sum(distMat(j,:) < rCol);
         b = c(a);
@@ -66,8 +67,8 @@ for i = 1:timeSteps
   
     if showPlot
         clf
-        viscircles([xData yData], ones(nrSwimmers, 1), 'linewidth', 0.1); 
-       % scatter(xData, yData, 30, col);
+       % viscircles([xData yData], ones(nrSwimmers, 1), 'linewidth', 0.1); 
+        scatter(xData, yData, 30, col);
         axis([0 xyRange 0 xyRange])
         drawnow
     end
