@@ -8,7 +8,7 @@ xyRange = 100;
 timeSteps = 2^16+1;
 showPlot = true;
 vMin = 2;
-freezeFrame = 5;
+freezeFrame = 100;
 
 posMat = zeros(1, 2*nrSwimmers);
 
@@ -40,6 +40,7 @@ for t = 1:timeSteps
             axis equal
             xlim([0 xyRange])
             ylim([0 xyRange])
+            title('t = 100'); 
             legend({'v=2 \mum/s', 'v=4 \mum/s','v=6 \mum/s','v=8 \mum/s'},'Location','southwest');
             xlabel('x \mum');
             ylabel('y \mum');
