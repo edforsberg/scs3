@@ -1,0 +1,12 @@
+T0 = -2;
+rc = 15;
+%rPush = 1;
+rCol = 4;
+Dr = 0;
+Dt = 0;
+dt = 0.2;
+v = 10;
+xyRange = 100;
+nrSwimmers = 100;
+timeSteps = 1000;
+showPlot = true;

@@ -42,37 +42,50 @@ classdef Swimmer < handle
             obj.vel = [dx; dy; 0]/norm([dx; dy; 0]);
         end
         
-        function newPos = interact(obj, Tn, dt, xyRange)
+        function newPos = interact(swimmer, Tn, dt, xyRange)
             
             Wdir = normrnd(0,1)/sqrt(dt);
-            dDir = Tn + sqrt(2*obj.Dr)*Wdir;
-            obj.dir = obj.dir + dDir*dt;
+            dDir = Tn + sqrt(2*swimmer.Dr)*Wdir;
+            swimmer.dir = swimmer.dir + dDir*dt;
             
                      
-            obj.dir = rem(obj.dir, 2*pi);
+            swimmer.dir = rem(swimmer.dir, 2*pi);
             
-            if(obj.xPos < -5)
-                obj.dir = 0;
+            if(swimmer.xPos < -5)
+                swimmer.dir = 0;
             end
-            if(obj.xPos > xyRange +5 )
-                obj.dir = pi;
+            if(swimmer.xPos > xyRange +5 )
+                swimmer.dir = pi;
             end
-            if(obj.yPos < -5)
-                obj.dir = pi/2;
+            if(swimmer.yPos < -5)
+                swimmer.dir = pi/2;
             end
-            if(obj.yPos > xyRange- 1)
-                obj.dir = 3*pi/2;
+            if(swimmer.yPos > xyRange- 1)
+                swimmer.dir = 3*pi/2;
             end
             
-            dx = obj.v*cos(obj.dir);
-            dy = obj.v*sin(obj.dir);
+            dx = swimmer.v*cos(swimmer.dir);
+            dy = swimmer.v*sin(swimmer.dir);
             
-            obj.xPos = obj.xPos + dx*dt;
-            obj.yPos = obj.yPos + dy*dt;
+            swimmer.xPos = swimmer.xPos + dx*dt;
+            swimmer.yPos = swimmer.yPos + dy*dt;
             
-            obj.vel = [dx; dy; 0]/norm([dx; dy; 0]);
-            newPos = [obj.xPos obj.yPos];
+            swimmer.vel = [dx; dy; 0]/norm([dx; dy; 0]);
+            newPos = [swimmer.xPos swimmer.yPos];
             
+        end
+        
+        function fixOverlap(swimmer, otherSwimmers)
+           
+            accVec = [0 0]; 
+            for i = 1:numel(otherSwimmers)
+                vec = [otherSwimmers(i).xPos-swimmer.xPos otherSwimmers(i).xPos-swimmer.xPos];
+                if(sum(vec) ~=0)
+                    accVec = accVec + vec;
+                end
+            end
+            swimmer.xPos = swimmer.xPos + accVec(1)/2; 
+            swimmer.yPos = swimmer.xPos + accVec(2)/2; 
         end
         
         function Tn = CalculateTorque(swimmer, otherSwimmer, rc, T0)
@@ -89,7 +102,7 @@ classdef Swimmer < handle
                     si = otherSwimmer(i);
                     rn = [si.xPos-xn si.yPos-yn 0];
                     dT = TorqueEq(vn, rn, T0);
-                    Tn = Tn+dT;
+                    Tn = Tn-dT;
                 end
             end
             
