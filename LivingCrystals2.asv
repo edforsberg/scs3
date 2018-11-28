@@ -1,11 +1,12 @@
 clc 
 clf
 
-T0 = 1;
+T0 = 4;
 rc = 10;
 Dr = 0;
 Dt = 0;
-dt = 0.1; 
+dt = 0.5; 
+v = 0.2; 
 xyRange = 100;
 nrSwimmers = 100;
 timeSteps = 1000;
@@ -29,21 +30,32 @@ end
 
 
 
-for i = 1:timeSteps
-    T = CalcTorque(swimmers,rc,T0);
+for i = 1:timeSteps    
     xData = [];
     yData = [];
     
+    tVec = []; 
     for j = 1:nrSwimmers
-        newPos = interact(swimmers(j), T(j), dt);
+        Tn = CalculateTorque(swimmers(j), swimmers, rc, T0);
+        tVec = [tVec; Tn];        
+    end
+    
+    
+    for j = 1:nrSwimmers        
+        newPos = interact(swimmers(j), tVec(j), dt, xyRange);
         xData = [xData;newPos(1)];
         yData = [yData;newPos(2)];
     end
+    
+    distMat = distMat = GetDistMat(swimmers);
+    for j = 1:nrSwimmers 
+       swimClose = sum(SistMat(:,
+    end
+    
     if showPlot
         clf
         scatter(xData, yData, 30);
         axis([0 xyRange 0 xyRange])
-        %set(plotHandle, 'XData', xData, 'YData', yData);
         drawnow
     end
 end
