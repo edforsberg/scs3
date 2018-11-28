@@ -40,8 +40,6 @@ for i = 1:timeSteps
     
     
     for j = 1:nrSwimmers
-        for k = 1:nrSwimmers
-            if(Calc
        
     end
     

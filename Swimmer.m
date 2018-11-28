@@ -10,7 +10,7 @@ classdef Swimmer < handle
         color = 0;
         vel = [0; 0; 0];
         torque = 0;
-        active = true; 
+        active = true;
     end
     
     methods
@@ -25,6 +25,7 @@ classdef Swimmer < handle
             obj.color = color;
             obj.vel = [cos(obj.dir) sin(obj.dir) 0];
             obj.vel = obj.vel/norm(obj.vel);
+            obj.active = active;
             
         end
         
@@ -48,35 +49,37 @@ classdef Swimmer < handle
         
         function interact(obj, dt, xyRange)
             
-            Wx = normrnd(0,1)/sqrt(dt);
-            Wy = normrnd(0,1)/sqrt(dt);
-            Wdir = normrnd(0,1)/sqrt(dt);
-            
-            dDir = obj.torque + sqrt(2*obj.Dr)*Wdir;
-            obj.dir = obj.dir + dDir*dt;
-            
-            obj.dir = rem(obj.dir, 2*pi);
-            
-            if(obj.xPos < -5)
-                obj.dir = 0;
-            end
-            if(obj.xPos > xyRange +5 )
-                obj.dir = pi;
-            end
-            if(obj.yPos < -5)
-                obj.dir = pi/2;
-            end
-            if(obj.yPos > xyRange- 1)
-                obj.dir = 3*pi/2;
-            end
-            
-            dx = obj.v*cos(obj.dir)+sqrt(2*obj.Dt)*Wx;
-            dy = obj.v*sin(obj.dir)+sqrt(2*obj.Dt)*Wy;
-            
-            obj.xPos = obj.xPos + dx*dt;
-            obj.yPos = obj.yPos + dy*dt;
             if obj.active
-            obj.vel = [dx; dy; 0]/norm([dx; dy; 0]);
+                Wx = normrnd(0,1)/sqrt(dt);
+                Wy = normrnd(0,1)/sqrt(dt);
+                Wdir = normrnd(0,1)/sqrt(dt);
+                
+                dDir = obj.torque + sqrt(2*obj.Dr)*Wdir;
+                obj.dir = obj.dir + dDir*dt;
+                
+                obj.dir = rem(obj.dir, 2*pi);
+                
+                if(obj.xPos < -5)
+                    obj.dir = 0;
+                end
+                if(obj.xPos > xyRange +5 )
+                    obj.dir = pi;
+                end
+                if(obj.yPos < -5)
+                    obj.dir = pi/2;
+                end
+                if(obj.yPos > xyRange- 1)
+                    obj.dir = 3*pi/2;
+                end
+                
+                dx = obj.v*cos(obj.dir)+sqrt(2*obj.Dt)*Wx;
+                dy = obj.v*sin(obj.dir)+sqrt(2*obj.Dt)*Wy;
+                
+                obj.xPos = obj.xPos + dx*dt;
+                obj.yPos = obj.yPos + dy*dt;
+                if obj.active
+                    obj.vel = [dx; dy; 0]/norm([dx; dy; 0]);
+                end
             end
             
         end
@@ -101,9 +104,20 @@ classdef Swimmer < handle
             
         end
         
-        function CalculatePasiveTorque(swimmer, otherSwimmers, particles, rc, T0);
+        function CalculatePasiveTorque(swimmer, particles, rc, T0)
+            
+            otherSwimmers =[]; 
+            otherParticles = []; 
+            for i = 1:numel(particles) 
+                if particles(i).active 
+                    otherSwimmers = [otherSwimmers; particles(i)]; 
+                else
+                    otherParticles = [otherParticles; particle(i)]; 
+                end
+            end                
+            
             swimTq = CalculateTorque(swimmer, otherSwimmers, rc, T0);
-            passTq = CalculateTorque(swimmer, particles, rc, T0);
+            passTq = CalculateTorque(swimmer, otherParticles, rc, T0);
             swimmer.torque = swimTq-passTq;
         end
         
@@ -111,9 +125,9 @@ classdef Swimmer < handle
             
             pushVec = [0;0];
             for i = 1:numel(otherSwimmers)
-                veci = [otherSwimmers(i).xPos-swimmer.xPos; otherSwimmers(i).yPos-swimmer.yPos]/2;
-                veci = (veci/norm(veci))*(rPush/2-norm(veci));
-                pushVec = pushVec - veci;
+                veci = [otherSwimmers(i).xPos-swimmer.xPos; otherSwimmers(i).yPos-swimmer.yPos];
+                veci = veci/norm(veci); 
+               % pushVec = pushVec - veci;
             end
             swimmer.xPos = swimmer.xPos + pushVec(1);
             swimmer.xPos = swimmer.xPos + pushVec(2);

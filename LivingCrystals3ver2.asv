@@ -1,0 +1,20 @@
+clear all
+
+nrParticles = 200;
+fractionActive = 1/10; 
+xyRange = 20;
+Dr = 0.22;
+Dt = 0.0;
+v = 2;
+dt = 0.1;
+rc = 15;
+T0 = 5;
+rPush = 0.2;
+timeSteps = 1000;
+
+particles = [];
+F = []; 
+for i = 1:nrParticles
+    active = rand < fractionActive;
+    particles = [particles; Swimmer(Dr, Dt, v, xyRange, 0, active)];
+end
