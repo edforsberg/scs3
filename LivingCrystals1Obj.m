@@ -8,7 +8,7 @@ xyRange = 100;
 timeSteps = 2^16+1;
 showPlot = true;
 vMin = 2;
-freezeFrame = 100;
+freezeFrame = 5;
 
 posMat = zeros(1, 2*nrSwimmers);
 
@@ -38,8 +38,8 @@ for t = 1:timeSteps
             hold on
             scatter(newPos(1),newPos(2),30,col,'filled');
             axis equal
-            xlim([0 rangeMax])
-            ylim([0 rangeMax])
+            xlim([0 xyRange])
+            ylim([0 xyRange])
             legend({'v=2 \mum/s', 'v=4 \mum/s','v=6 \mum/s','v=8 \mum/s'},'Location','southwest');
             xlabel('x \mum');
             ylabel('y \mum');
