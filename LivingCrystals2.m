@@ -1,14 +1,14 @@
 clc
 clf
 
-T0 = 5;
+T0 = 10;
 rc = 15;
 rPush = 2;
 rCol = 4;
 Dr = 0;
 Dt = 0;
-dt = 0.05;
-v = 10;
+dt = 0.2;
+v = 2;
 xyRange = 100;
 nrSwimmers = 100;
 timeSteps = 1000;
