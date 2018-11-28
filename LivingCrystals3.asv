@@ -1,7 +1,8 @@
 clear all
 
-nrSwimmers = 100;
-xyRange = 100;
+nrSwimmers = 30;
+nrPasive = 200; 
+xyRange = 20;
 Dr = 0.22;
 Dt = 0.0;
 v = 2;
@@ -10,16 +11,22 @@ rc = 15;
 T0 = 5;
 rPush = 2.2;
 timeSteps = 1000;
-record = false;
 
 swimmers = [];
-F = [];
+F = []; 
 for i = 1:nrSwimmers
     swimmers = [swimmers; Swimmer(Dr, Dt, v, xyRange, 0, true)];
 end
 
-xData = zeros(nrSwimmers, 1);
-yData = zeros(nrSwimmers, 1);
+particles = []; 
+for i = 1:nrPasive
+    particles = [particles; Swimmer(0, Dt, 0, xyRange, 0, false)];
+end
+
+xDataS = zeros(nrSwimmers, 1);
+yDataS = zeros(nrSwimmers, 1);
+xDataP = zeros(nrPasive, 1);
+yDataP = zeros(nrPasive, 1);
 t = 0;
 f = [];
 for i = 1:timeSteps
@@ -28,7 +35,7 @@ for i = 1:timeSteps
     for j = 1:nrSwimmers
         otherSwimmers = swimmers;
         otherSwimmers(j) = [];
-        CalculateTorque(swimmers(j), otherSwimmers, rc, T0);
+        CalculatePasiveTorque(swimmers(j), otherSwimmers, particles, rc, T0);
     end
     
     posMat = [];
@@ -49,35 +56,21 @@ for i = 1:timeSteps
     
     
     for j = 1:nrSwimmers
-        xData(j) = swimmers(j).xPos;
-        yData(j) = swimmers(j).yPos;
+        xDataS(j) = swimmers(j).xPos;
+        yDataS(j) = swimmers(j).yPos;
+    end
+     for j = 1:nrPasive
+        xDataP(j) = particles(j).xPos;
+        yDataP(j) = particles(j).yPos;
     end
     
     clf
-    scatter(xData, yData,60);
+%     scatter(xDataS, yDataS,60, 'b');
+%     hold on
+%     scatter(xDataP, yDataP,60, 'r'); 
+ viscircles
     axis([0 xyRange 0 xyRange]);
     legend({sprintf('Dr = 0.05, v = 2,nrSwimmers = 100, T0 = 6, dt = 0.1, t = %d', t)}, 'Location','southwest');
     drawnow
-    if record
-        F = [F; getframe];
-    end
-    
     
 end
-
-if record
-    writerObj = VideoWriter('myVideo.avi');
-    writerObj.FrameRate = 10;
-    % set the seconds per image
-    % open the video writer
-    open(writerObj);
-    % write the frames to the video
-    for i=1:length(F)
-        % convert the image to a frame
-        frame = F(i) ;
-        writeVideo(writerObj, frame);
-    end
-    % close the writer object
-    close(writerObj);
-end
-

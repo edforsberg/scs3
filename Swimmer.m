@@ -14,7 +14,7 @@ classdef Swimmer < handle
     end
     
     methods
-        function obj = Swimmer(Dr, Dt, v, xyRange, color)
+        function obj = Swimmer(Dr, Dt, v, xyRange, color, active)
             
             obj.xPos = rand*xyRange;
             obj.yPos = rand*xyRange;
@@ -75,8 +75,9 @@ classdef Swimmer < handle
             
             obj.xPos = obj.xPos + dx*dt;
             obj.yPos = obj.yPos + dy*dt;
-            
+            if obj.active
             obj.vel = [dx; dy; 0]/norm([dx; dy; 0]);
+            end
             
         end
         
@@ -98,6 +99,12 @@ classdef Swimmer < handle
                 swimmer.torque = Tn;
             end
             
+        end
+        
+        function CalculatePasiveTorque(swimmer, otherSwimmers, particles, rc, T0);
+            swimTq = CalculateTorque(swimmer, otherSwimmers, rc, T0);
+            passTq = CalculateTorque(swimmer, particles, rc, T0);
+            swimmer.torque = swimTq-passTq;
         end
         
         function pushVec = Push(swimmer, otherSwimmers, rPush)
