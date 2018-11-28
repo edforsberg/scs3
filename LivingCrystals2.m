@@ -1,18 +1,19 @@
 clc 
 clf
 
-T0 = -2;
-rc = 8;
+T0 = 1;
+rc = 15;
 Dr = 0;
 Dt = 0;
 dt = 1; 
 v = 0.5; 
 rPush = 1.5;
-rCol = 5; 
+rCol = 3; 
 xyRange = 100;
 nrSwimmers = 100;
 timeSteps = 1000;
 showPlot = true;
+c = linspace(1,3,100);
 colormap cool 
 
 xData = [];
@@ -30,8 +31,6 @@ end
 if showPlot
     scatter(xData, yData, 30);
 end
-
-
 
 for i = 1:timeSteps    
     xData = [];
@@ -62,12 +61,11 @@ for i = 1:timeSteps
         end        
         xData = [xData;swimmers(j).xPos];
         yData = [yData;swimmers(j).yPos];
-        colVec = [sum(distMat(:,j) < rCol); col]; 
+        colVec = [c(sum(distMat(:,j) < rCol)); colVec]; 
     end
         
     if showPlot
         clf
-        col
         scatter(xData, yData, 30, colVec);
         axis([0 xyRange 0 xyRange])
         drawnow
