@@ -1,55 +1,36 @@
-clc 
-clf
+clear all 
 
-T0 = 4;
-rc = 10;
-Dr = 0;
-Dt = 0;
-dt = 0.5; 
-v = 0.2; 
-xyRange = 100;
-nrSwimmers = 100;
-timeSteps = 1000;
-showPlot = true;
 
-xData = [];
-yData = [];
+
+nrSwimmers = 100; 
+Dr = 0; 
+Dt  = 0; 
+xyRange = 100; 
+color = 1; 
+v = 1; 
+dt = 1; 
+rc = 10; 
+T0 = 1; 
 
 swimmers = [];
 for i = 1:nrSwimmers
-    swimmer = Swimmer(Dr, Dt, v, xyRange, 1);
-    swimmer.Move(dt);
-    swimmers = [swimmers; swimmer];
-    xData = [xData; swimmer.xPos];
-    yData = [yData; swimmer.yPos];
+    swimmers = [swimmers; Swimmer(Dr,Dt,v, xyRange, color, true)];
+end
+       
+for j=1:nrSwimmers 
+    CalculateTorque(swimmers(j), swimmers([1:j-1, j+1:end]), rc, T0);    
+end 
+
+for j = 1:nrSwimmers 
+    interact(swimmers(j), dt, xyRange)
 end
 
-if showPlot
-    scatter(xData, yData, 30);
+for j = 1:nrSwimmers 
+    
+    push(swimmers, rc);
+    
 end
 
-
-
-for i = 1:timeSteps    
-    xData = [];
-    yData = [];
-    
-    tVec = []; 
-    for j = 1:nrSwimmers
-        Tn = CalculateTorque(swimmers(j), swimmers, rc, T0);
-        tVec = [tVec; Tn];        
-    end    
-    
-    for j = 1:nrSwimmers
-        newPos = interact(swimmers(j), tVec(j), dt, xyRange);
-        xData = [xData;newPos(1)];
-        yData = [yData;newPos(2)];
-    end
-    
-    if showPlot
-        clf
-        scatter(xData, yData, 30, 'filled');
-        axis([0 xyRange 0 xyRange])
-        drawnow
-    end
-end
+xPos = swimmers.xPos; 
+yPos = swimmers.yPos; 
+        
