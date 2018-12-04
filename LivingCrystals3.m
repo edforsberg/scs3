@@ -2,10 +2,10 @@ clear all
 
 
 
-nrSwimmers = 200;
-nrActive = 80; 
-Dr = 0;
-Dt  = 0;
+nrSwimmers = 500;
+nrActive = 20; 
+Dr = 0.1;
+Dt  = 0.1;
 xyRange = 100;
 color = 1;
 v = 0.3;
@@ -52,8 +52,8 @@ for t = 1:timeSteps
     scatter(xPosPassive, yPosPassive, 60, 'r', 'filled');
     hold on
     plot([xPosActive;xDirActive], [yPosActive;yDirActive], 'color', 'red');
-    legend({sprintf('Dr = %d, Dt = %d, v = 0.3, T0 = %0f, dt = %d, t = %d',...
-        Dr, Dt, T0, dt, t)}, 'Location','southwest');
+    legend({sprintf('Dr = %g, Dt = %g, v = %g, T0 = %g, dt = %g, t = %g',...
+        Dr, Dt,v, T0, dt, t)}, 'Location','southwest');
     axis equal
     xlim([0 xyRange])
     ylim([0 xyRange])

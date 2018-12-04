@@ -11,9 +11,9 @@ v = 0.3;
 dt = 1;
 rc = 8;
 T0 = 0.8;
-timeSteps = 1000;
+timeSteps = 200;
 rPush = 3;
-record = true;
+record = false;
 
 
 
@@ -39,16 +39,16 @@ for t = 1:timeSteps
     for j = 1:nrSwimmers
         xPos(j) = swimmers(j).xPos;
         yPos(j) = swimmers(j).yPos;
-        xDir(j) = xPos(j)+cos(swimmers(j).dir);
-        yDir(j) = yPos(j)+sin(swimmers(j).dir);
+        xDir(j) = xPos(j)+cos(swimmers(j).dir)*1.5;
+        yDir(j) = yPos(j)+sin(swimmers(j).dir)*1.5;
     end
     
     clf
     gcf = scatter(xPos, yPos, 60);
     hold on
     plot([xPos;xDir], [yPos;yDir], 'color', 'red');
-    legend({sprintf('Dr = %d, Dt = %d, v = 0.3, T0 = %0f, dt = %d, t = %d',...
-        Dr, Dt, T0, dt, t)}, 'Location','southwest');
+    legend({sprintf('Dr = %g, Dt = %g, v = %g, T0 = %g, dt = %g, t = %g',...
+        Dr, Dt,v, T0, dt, t)}, 'Location','southwest');
     axis equal
     xlim([0 xyRange])
     ylim([0 xyRange])
@@ -61,7 +61,7 @@ end
 
 
 if record
-    writerObj = VideoWriter('myVideo.avi');
+    writerObj = VideoWriter('3.2Video2.avi');
     writerObj.FrameRate = 10;
     open(writerObj);
     for t=1:length(F)
