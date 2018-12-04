@@ -98,26 +98,6 @@ classdef Swimmer < handle
             end
             swimmer.torque = Tn;
         end
-        
-        
-        % function push(swimmers, rPush)
-        %
-        %             for i = 1:numel(swimmers)
-        %                 swimmer = swimmers(i);
-        %                 otherSwimmers = swimmers;
-        %                 otherSwimmers(i) = [];
-        %                 for j = 1:numel(otherSwimmers)
-        %                      rni = sqrt((swimmer.xPos-otherSwimmers(j).xPos)^2+(swimmer.yPos-otherSwimmers(j).yPos)^2);
-        %                      if (rni < rPush)
-        %                          pushVec = [swimmer.xPos-otherSwimmers(j).xPos swimmer.yPos-otherSwimmers(j).yPos];
-        %                          pLength = (rPush-rni);
-        %                          pushVec = (pushVec/norm(pushVec))*pLength;
-        %                          swimmer.xPos = swimmer.xPos+pushVec(1);
-        %                          swimmer.yPos = swimmer.yPos+pushVec(2);
-        %                      end
-        %                 end
-        %             end
-        %         end
         function push(swimmers, rPush)
          
             for i=1:numel(swimmers)
@@ -135,7 +115,7 @@ classdef Swimmer < handle
                     rni = sqrt((swimmer.xPos-otherSwimmers(j).xPos)^2+(swimmer.yPos-otherSwimmers(j).yPos)^2);
                     if (rni < rPush && rni ~= 0)
                         pushVec = [swimmer.xPos-otherSwimmers(j).xPos swimmer.yPos-otherSwimmers(j).yPos];
-                        pLength = (rPush-rni);
+                        pLength = (rPush-rni)/2;
                         pushVec = (pushVec/norm(pushVec))*pLength;
                         swimmer.xPos = swimmer.xPos+pushVec(1);
                         swimmer.yPos = swimmer.yPos+pushVec(2);
