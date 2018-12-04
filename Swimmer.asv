@@ -120,13 +120,6 @@ classdef Swimmer < handle
         %         end
         function push(swimmers, rPush)
             
-            for i=1:numel(swimmers)
-                xPos(i) = swimmers(i).xPos; 
-                yPos(i) = swimmers(i).yPos; 
-            end
-            distMat = dist([xPos;yPos]); 
-                
-            
             
         end
     end
