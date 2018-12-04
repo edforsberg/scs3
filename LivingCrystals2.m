@@ -45,11 +45,11 @@ end
 clf 
 scatter(xPos, yPos, 60); 
 hold on
-tic
-for j = 1:nrSwimmers
-plot([xPos(j) xDir(j)], [yPos(j), yDir(j)], 'color', 'red'); 
-hold on 
-end 
+
+
+plot([xPos;xDir], [yPos;yDir], 'color', 'red'); 
+ 
+
 axis equal 
 xlim([0 xyRange]) 
 ylim([0 xyRange])

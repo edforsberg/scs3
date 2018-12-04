@@ -55,16 +55,16 @@ classdef Swimmer < handle
                 
                 obj.dir = rem(obj.dir, 2*pi);
                 
-                if(obj.xPos < -5)
+                if(obj.xPos < -1)
                     obj.dir = 0;
                 end
-                if(obj.xPos > xyRange +5 )
+                if(obj.xPos > xyRange +1 )
                     obj.dir = pi;
                 end
-                if(obj.yPos < -5)
+                if(obj.yPos < -1)
                     obj.dir = pi/2;
                 end
-                if(obj.yPos > xyRange- 1)
+                if(obj.yPos > xyRange+ 1)
                     obj.dir = 3*pi/2;
                 end
                 
