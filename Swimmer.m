@@ -119,12 +119,14 @@ classdef Swimmer < handle
         %             end
         %         end
         function push(swimmers, rPush)
-            
+         
             for i=1:numel(swimmers)
                 xPos(i) = swimmers(i).xPos;
                 yPos(i) = swimmers(i).yPos;
             end
+           
             distMat = dist([xPos;yPos]);
+           
             checkMat = distMat < 2*rPush;
             for i = 1:numel(swimmers)
                 swimmer = swimmers(i);
@@ -139,7 +141,7 @@ classdef Swimmer < handle
                         swimmer.yPos = swimmer.yPos+pushVec(2);
                     end
                 end
-            end                    
+            end         
         end
     end
 end

@@ -10,7 +10,7 @@ color = 1;
 v = 0.3; 
 dt = 1; 
 rc = 8; 
-T0 = -1; 
+T0 = 1; 
 timeSteps = 10000; 
 rPush = 3; 
 
@@ -46,10 +46,10 @@ clf
 scatter(xPos, yPos, 60); 
 hold on
 tic
-for j = 1:nrSwimmers
-plot([xPos(j) xDir(j)], [yPos(j), yDir(j)], 'color', 'red'); 
-hold on 
-end 
+% for j = 1:nrSwimmers
+% plot([xPos(j) xDir(j)], [yPos(j), yDir(j)], 'color', 'red'); 
+% hold on 
+% end 
 axis equal 
 xlim([0 xyRange]) 
 ylim([0 xyRange])
