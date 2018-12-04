@@ -92,7 +92,7 @@ classdef Swimmer < handle
                 if(rni < rc && rni ~= 0)
                     si = otherSwimmer(i);
                     rn = [si.xPos-xn si.yPos-yn 0];
-                    dT = TorqueEq(vn, rn, T0);
+                    dT = TorqueEq(vn, rn, -T0);
                     Tn = Tn+dT;
                 end
             end
