@@ -121,13 +121,25 @@ classdef Swimmer < handle
         function push(swimmers, rPush)
             
             for i=1:numel(swimmers)
-                xPos(i) = swimmers(i).xPos; 
-                yPos(i) = swimmers(i).yPos; 
+                xPos(i) = swimmers(i).xPos;
+                yPos(i) = swimmers(i).yPos;
             end
-            distMat = dist([xPos;yPos]); 
-                
-            
-            
+            distMat = dist([xPos;yPos]);
+            checkMat = distMat < 2*rPush;
+            for i = 1:numel(swimmers)
+                swimmer = swimmers(i);
+                otherSwimmers = swimmers(find(checkMat(i,:)));
+                for j = 1:numel(otherSwimmers)
+                    rni = sqrt((swimmer.xPos-otherSwimmers(j).xPos)^2+(swimmer.yPos-otherSwimmers(j).yPos)^2);
+                    if (rni < rPush && rni ~= 0)
+                        pushVec = [swimmer.xPos-otherSwimmers(j).xPos swimmer.yPos-otherSwimmers(j).yPos];
+                        pLength = (rPush-rni);
+                        pushVec = (pushVec/norm(pushVec))*pLength;
+                        swimmer.xPos = swimmer.xPos+pushVec(1);
+                        swimmer.yPos = swimmer.yPos+pushVec(2);
+                    end
+                end
+            end                    
         end
     end
 end

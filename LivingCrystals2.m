@@ -2,17 +2,17 @@ clear all
 
 
 
-nrSwimmers = 100; 
+nrSwimmers = 60; 
 Dr = 0; 
 Dt  = 0; 
-xyRange = 100; 
+xyRange = 50; 
 color = 1; 
-v = 0.1; 
+v = 0.3; 
 dt = 1; 
 rc = 10; 
 T0 = -1; 
 timeSteps = 10000; 
-rPush = 1; 
+rPush = 2; 
 
 
 
@@ -41,7 +41,7 @@ for j = 1:nrSwimmers
 end
 
 clf 
-scatter(xPos, yPos, 30); 
+scatter(xPos, yPos, 100); 
 axis equal 
 xlim([0 xyRange]) 
 ylim([0 xyRange])
