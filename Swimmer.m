@@ -79,21 +79,25 @@ classdef Swimmer < handle
             end
         end
         
-        function CalculateTorque(swimmer, otherSwimmer, rc, T0)
+        function CalculateTorque(swimmer, otherSwimmers, rc, T0)
             
             Tn = 0;
             vn = swimmer.vel;
             xn = swimmer.xPos;
             yn = swimmer.yPos;
             
-            for i = 1:numel(otherSwimmer)
+            for i = 1:numel(otherSwimmers)                
                 
-                rni = sqrt((swimmer.xPos-otherSwimmer(i).xPos)^2+(swimmer.yPos-otherSwimmer(i).yPos)^2);
+                rni = sqrt((swimmer.xPos-otherSwimmers(i).xPos)^2+(swimmer.yPos-otherSwimmers(i).yPos)^2);
                 if(rni < rc && rni ~= 0)
-                    si = otherSwimmer(i);
+                    si = otherSwimmers(i);
                     rn = [si.xPos-xn si.yPos-yn 0];
                     dT = TorqueEq(vn, rn, -T0);
-                    Tn = Tn+dT;
+                    if (otherSwimmers(i).active)
+                        Tn = Tn+dT;
+                    else
+                        Tn = Tn-dT;
+                    end
                 end
             end
             swimmer.torque = Tn;

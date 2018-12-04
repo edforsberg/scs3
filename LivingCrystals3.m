@@ -3,7 +3,7 @@ clear all
 
 
 nrSwimmers = 200;
-nrActive = 30; 
+nrActive = 80; 
 Dr = 0;
 Dt  = 0;
 xyRange = 100;
@@ -15,8 +15,6 @@ T0 = 0.8;
 timeSteps = 1000;
 rPush = 3;
 record = false;
-
-
 
 swimmers = [];
 for i = 1:nrSwimmers
@@ -64,8 +62,6 @@ for t = 1:timeSteps
         F(t) = getframe;
     end    
 end
-
-
 
 if record
     writerObj = VideoWriter('myVideo.avi');
